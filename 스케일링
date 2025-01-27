@@ -1,0 +1,31 @@
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+
+# 결측치 처리
+# 'Age', 'HasCrCard', 'IsActiveMember'의 결측치를 평균으로 대체
+imputer = SimpleImputer(strategy='mean')
+df[['Age', 'HasCrCard', 'IsActiveMember']] = imputer.fit_transform(df[['Age', 'HasCrCard', 'IsActiveMember']])
+
+# Geography의 결측치는 최빈값으로 대체
+imputer_mode = SimpleImputer(strategy='most_frequent')
+df[['Geography']] = imputer_mode.fit_transform(df[['Geography']])
+
+# 범주형 데이터를 더미 변수로 변환
+df = pd.get_dummies(df, columns=['Geography', 'Gender'], drop_first=True)
+
+# 스케일링 및 정규화
+# 스케일링 및 정규화 적용 대상 열
+scale_columns = ['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'EstimatedSalary']
+
+# 스케일링: StandardScaler
+scaler = StandardScaler()
+df_scaled = df.copy()
+df_scaled[scale_columns] = scaler.fit_transform(df[scale_columns])
+
+# 정규화: MinMaxScaler
+normalizer = MinMaxScaler()
+df_normalized = df.copy()
+df_normalized[scale_columns] = normalizer.fit_transform(df[scale_columns])
+
+# 결과 확인
+df_scaled.head(), df_normalized.head()
