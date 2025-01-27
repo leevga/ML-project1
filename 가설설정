@@ -1,0 +1,10 @@
+# 결측값 처리: Geography, Exited, Balance 관련 데이터 확인 및 정리
+data_cleaned = data.dropna(subset=['Geography', 'Exited', 'Balance'])
+
+# 가설 1: 지역에 따른 고객 이탈률 분석
+churn_by_region = data_cleaned.groupby('Geography')['Exited'].mean()
+
+# 가설 2: 지역별 평균 잔고 분석
+balance_by_region = data_cleaned.groupby('Geography')['Balance'].mean()
+
+churn_by_region, balance_by_region
